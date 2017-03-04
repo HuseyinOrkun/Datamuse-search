@@ -51,10 +51,7 @@ md 	Metadata flags: A list of single-letter codes (no delimiter) requesting
 that extra lexical knowledge be included with the results.
 """
 import re
-def serch_datamuse_wordenp(ml ,sl=None, sp=None, code=None ,max_res= 100, qe=None):#did not understand qe
-  
-
-        
+def serch_datamuse_wordenp(ml ,sl=None, sp=None, code=None ,max_res = 100,v=None ,qe=None): #did not understand qe
     md = '&md=fpd' #hardwired
     ml = re.sub(" ","+",ml)
     req_base = "https://api.datamuse.com/words?max_res=" +str(max_res)+'&'
@@ -67,26 +64,33 @@ def serch_datamuse_wordenp(ml ,sl=None, sp=None, code=None ,max_res= 100, qe=Non
         req_base = req_base + '&sp=' + sp
     
     code_string = ''
-    for key,item in code.items():
-        code_string = code_string + "&rel_"+ key +"=" + item
+    if code is not None:
+        for key,item in code.items():
+            code_string = code_string + "&rel_"+ key +"=" + item
     
-    
+
     req_addr = req_base + code_string+md
-    print(req_addr)
-#r = requests.get(req_addr)
+    
+    if v is not None:
+        req_addr = req_addr + '&v='+v
+    
+    r = requests.get(req_addr)
+    json_data = r.json()
+    return json_data
+#there may not be a need for this
 
-
+def wiki_search(ml ,sl=None, sp=None, code=None ,max_res = 100, qe=None):
+    json_data = serch_datamuse_wordenp(ml,sl,sp,code,max_res,v = 'enwiki')
+    return json_data
+       
+"""might not implement this"""
 def serch_datamuse_sug(s, max_res):
     req_base = "https://api.datamuse.com/sug?"
    
     req_addr = req_base + 's=' + s+'&max='+str(max_res)
     r = requests.get(req_addr)
 
-    print(r.text)
-code = {'jja':"yellow", 'jjb':'test'}
-#serch_datamuse_wordenp("ringing in the ears",sp = 'a*' ,code = code)
 
-serch_datamuse_sug(s = 'rawand', max_res = 10)
 
 
 
