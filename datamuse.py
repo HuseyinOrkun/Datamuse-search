@@ -7,7 +7,7 @@ Created on Mon Feb 27 11:19:49 2017
 """
 
 import requests
-import json
+import re
 """
 
 rel_[code]: code parameter should be a list
@@ -50,12 +50,11 @@ max: Maximum number of results to return
 md 	Metadata flags: A list of single-letter codes (no delimiter) requesting
 that extra lexical knowledge be included with the results.
 """
-import re
-def serch_datamuse_wordenp(ml ,sl=None, sp=None, code=None ,max_res = 100,v=None ,qe=None): #did not understand qe
+def search_datamuse_wordenp(ml ,sl=None, sp=None, code=None ,max_res = 100,v=None ,qe=None): #did not understand qe
     md = '&md=fpd' #hardwired
     ml = re.sub(" ","+",ml)
     req_base = "https://api.datamuse.com/words?max_res=" +str(max_res)+'&'
-    req_base= req_base + "ml="+ml
+    req_base= req_base + "ml=" + ml
     
     if sl is not None:
         req_base = req_base + '&sl=' +sl
@@ -80,24 +79,12 @@ def serch_datamuse_wordenp(ml ,sl=None, sp=None, code=None ,max_res = 100,v=None
 #there may not be a need for this
 
 def wiki_search(ml ,sl=None, sp=None, code=None ,max_res = 100, qe=None):
-    json_data = serch_datamuse_wordenp(ml,sl,sp,code,max_res,v = 'enwiki')
+    json_data = search_datamuse_wordenp(ml,sl,sp,code,max_res,v = 'enwiki')
     return json_data
-       
+
 """might not implement this"""
 def serch_datamuse_sug(s, max_res):
     req_base = "https://api.datamuse.com/sug?"
    
     req_addr = req_base + 's=' + s+'&max='+str(max_res)
     r = requests.get(req_addr)
-
-
-
-
-
-
-
-
-
-
-
-
