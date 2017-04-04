@@ -8,6 +8,7 @@ Created on Mon Feb 27 11:19:49 2017
 
 import requests
 import re
+
 """
 
 rel_[code]: code parameter should be a list
@@ -27,8 +28,8 @@ nry 	Approximate rhymes (per RhymeZone) 	forest → chorus
 hom 	Homophones (sound-alike words) 	course → coarse
 cns 	Consonant match 	sample → simple"""
 
-
-"""parameters
+"""
+parameters
 ml(means-like): require that the results have a meaning related to this string value, which can be any word or sequence of words.
 
 sl(sounds-like):require that the results are pronounced similarly to this string of characters. 
@@ -50,41 +51,64 @@ max: Maximum number of results to return
 md 	Metadata flags: A list of single-letter codes (no delimiter) requesting
 that extra lexical knowledge be included with the results.
 """
-def search_datamuse_wordenp(ml ,sl=None, sp=None, code=None ,max_res = 100,v=None ,qe=None): #did not understand qe
-    md = '&md=fpd' #hardwired
-    ml = re.sub(" ","+",ml)
-    req_base = "https://api.datamuse.com/words?max_res=" +str(max_res)+'&'
-    req_base= req_base + "ml=" + ml
-    
+
+
+def search_datamuse_wordenp(ml, sl=None, sp=None, code=None, max_res=100, v=None ):  # did not understand qe
+    #md = '&md=f'  # meta data, hardwired to word part of speech
+    ml = re.sub(" ", "+", ml)  # change spaces w/ +
+    req_base = "https://api.datamuse.com/words?max=" + str(max_res) + '&'
+    req_base = req_base + "ml=" + ml
+
+    # can be used for rhymes
     if sl is not None:
-        req_base = req_base + '&sl=' +sl
-    
+        req_base = req_base + '&sl=' + sl
+
+    # known letters / unknown letters
     if sp is not None:
         req_base = req_base + '&sp=' + sp
-    
+
+    # related word codes as given above
+    # code is a list
     code_string = ''
     if code is not None:
-        for key,item in code.items():
-            code_string = code_string + "&rel_"+ key +"=" + item
-    
+        for key, item in code.items():
+            code_string = code_string + "&rel_" + key + "=" + item
 
-    req_addr = req_base + code_string+md
-    
+    req_addr = req_base + code_string # + md
+
+    # vocabulary used
     if v is not None:
-        req_addr = req_addr + '&v='+v
-    
+        req_addr = req_addr + '&v=' + v
+
+    print(req_addr)
+
     r = requests.get(req_addr)
     json_data = r.json()
     return json_data
-#there may not be a need for this
 
-def wiki_search(ml ,sl=None, sp=None, code=None ,max_res = 100, qe=None):
-    json_data = search_datamuse_wordenp(ml,sl,sp,code,max_res,v = 'enwiki')
+
+# there may not be a need for this
+def wiki_search(ml, sl=None, sp=None, code=None, max_res=100, qe=None):
+    json_data = search_datamuse_wordenp(ml, sl, sp, code, max_res, v='enwiki')
     return json_data
 
-"""might not implement this"""
-def serch_datamuse_sug(s, max_res):
+# autocomplete
+def search_datamuse_sug(s, max_res):
     req_base = "https://api.datamuse.com/sug?"
-   
-    req_addr = req_base + 's=' + s+'&max='+str(max_res)
+    req_addr = req_base + 's=' + s + '&max=' + str(max_res)
     r = requests.get(req_addr)
+
+
+def datamuse_answer_list(clue, word_length):
+    len = ""
+    for i in range(word_length) :
+        len += '?'
+    ans_list = search_datamuse_wordenp(clue, max_res=10, sp=len)
+    for el in ans_list:
+        el.pop("tags")
+    return ans_list
+
+
+
+
+

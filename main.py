@@ -13,3 +13,6 @@ logger.setLevel(logging.INFO)
 
 def run(event, context):
     return json.dumps(datamuse.search_datamuse_wordenp(event['query']['clue']))
+
+print("aa")
+print(run())
