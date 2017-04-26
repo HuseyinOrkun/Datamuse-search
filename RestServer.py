@@ -12,7 +12,7 @@ app = Flask(__name__)
 
 # example request:
 # curl -i -H "Content-Type: application/json" -X POST -d '{"ml":"Seasoning on an everything bagel"}' http://localhost:5000/datamuse/api/search_datamuse_wordenp
-@app.route('/datamuse/api/search_datamuse_wordenp', methods=['POST'])
+@app.route('/datamuse/search_datamuse_wordenp', methods=['POST'])
 def search_wordenp():
     if not request.json or not 'ml' in request.json:
         abort(400)
@@ -21,7 +21,7 @@ def search_wordenp():
 
 # example request:
 # curl -i -H "Content-Type: application/json" -X POST -d '{"ml":"Seasoning on an everything bagel"}' http://localhost:5000/datamuse/api/wiki_search
-@app.route('/datamuse/api/wiki_search', methods=['POST'])
+@app.route('/datamuse/wiki_search', methods=['POST'])
 def wiki_search():
     if not request.json or not 'ml' in request.json:
         abort(400)
@@ -30,7 +30,7 @@ def wiki_search():
 
 # example request:
 # curl -i -H "Content-Type: application/json" -X POST -d '{"ml":"Seasoning on an everything bagel", "word_length": 4}' http://localhost:5000/datamuse/api/datamuse_answer_list
-@app.route('/datamuse/api/datamuse_answer_list', methods=['POST'])
+@app.route('/datamuse/datamuse_answer_list', methods=['POST'])
 def answer_list():
     if not request.json or not 'ml' in request.json or not 'word_length' in request.json:
         abort(400)
