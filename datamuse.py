@@ -89,8 +89,13 @@ def search_datamuse_wordenp(ml, sl=None, sp=None, code=None, max_res=100, v=None
 
 # there may not be a need for this
 def wiki_search(ml, sl=None, sp=None, code=None, max_res=100, qe=None):
-    json_data = search_datamuse_wordenp(ml, sl, sp, code, max_res, v='enwiki')
-    return json_data
+    len = ""
+    for i in range(word_len):
+        len += '?'
+    ans_list = search_datamuse_wordenp(ml, sl, len,code, max_res, v='enwiki')
+    for el in answer_list:
+        el.pop("tags")
+    return ans_list
 
 # autocomplete
 def search_datamuse_sug(s, max_res):
