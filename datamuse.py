@@ -88,7 +88,7 @@ def search_datamuse_wordenp(ml, sl=None, sp=None, code=None, max_res=100, v=None
 
 
 # there may not be a need for this
-def wiki_search(ml, sl=None, sp=None, code=None, max_res=100, qe=None):
+def wiki_search(word_len,ml, sl=None, sp=None, code=None, max_res=100, qe=None):
     len = ""
     for i in range(word_len):
         len += '?'
